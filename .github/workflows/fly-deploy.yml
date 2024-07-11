@@ -26,9 +26,6 @@ jobs:
       - name: Build the application locally
         run: npm run build
       
-      - name: Start the application locally
-        run: npm start
-      
       - name: Install Flyctl
         uses: superfly/flyctl-actions/setup-flyctl@v1
         with:
