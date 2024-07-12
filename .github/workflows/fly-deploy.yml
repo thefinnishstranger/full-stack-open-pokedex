@@ -8,9 +8,10 @@ on:
 jobs:
   deploy:
     name: Deploy app
+    if: ${{ github.event_name == 'push' }}
     runs-on: ubuntu-latest
     concurrency:
-      group: deploy-group    # Ensure only one action runs at a time in this group
+      group: deploy-group  # Ensure only one action runs at a time in this group
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
