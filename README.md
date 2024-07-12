@@ -6,6 +6,8 @@ Fork the repository to complete course exercises
 
 ## Commands
 
+Edited readme
+
 Start by running `npm install` inside the project folder
 
 `npm start` to run the webpack dev server
