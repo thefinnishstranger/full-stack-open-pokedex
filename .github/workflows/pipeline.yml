@@ -27,6 +27,9 @@ jobs:
         uses: rjstone/discord-webhook-notify@v1.0.4
         env:
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+      - name: The job has succeeded
+        if: ${{ success() }}
+        run: echo Success!
     
     
   tag_release:
