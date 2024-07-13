@@ -23,6 +23,11 @@ jobs:
         run: npm run build
       - name: test
         run: npm test
+      - name: Discord Webhook Notify
+        uses: rjstone/discord-webhook-notify@v1.0.4
+        env:
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+    
     
   tag_release:
     needs: [simple_deployment_pipeline]
@@ -30,7 +35,7 @@ jobs:
     steps:
       - name: Bump version and push tag
         if: ${{ github.event_name == 'push' }}
-        uses: anothrNick/github-tag-action@1.70.0
+        uses: anothrNick/github-tag-action@777684df761b882a3f4f70db16ac70d8cc78d0ea
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEFAULT_BUMP: patch
