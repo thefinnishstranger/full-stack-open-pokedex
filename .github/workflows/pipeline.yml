@@ -1,44 +1,43 @@
-name: Deployment pipeline
+name: CI pipeline
 
 on:
   push:
     branches:
       - main
-    pull_request:
-      branches: [main]
-      types: [opened, synchronize]
+  pull_request:
+    branches:
+      - main
+
 jobs:
-  simple_deployment_pipeline:
-    runs-on: ubuntu-20.04
+  build:
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: '20'
+
       - name: Install dependencies
         run: npm install
-      - name: Check style
-        run: npm run eslint
-      - name: build
+
+      - name: Build server
         run: npm run build
-      - name: test
-        run: npm test
+
+      - name: Build frontend
+        run: |
+          cd frontend
+          npm install
+          npm run build
+          cd ..
+
       - name: Discord Webhook Notify
         uses: rjstone/discord-webhook-notify@v1.0.4
         with:
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
-      - name: The job has succeeded
+
+      - name: Notify on Success
         if: ${{ success() }}
         run: echo "Success!"
-    
-    
-  tag_release:
-    needs: [simple_deployment_pipeline]
-    if: ${{ github.event_name == 'push' }}
-    runs-on: ubuntu-20.04
-    steps:
-      - name: Bump version and push tag
-        uses: anothrNick/github-tag-action@777684df761b882a3f4f70db16ac70d8cc78d0ea
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          DEFAULT_BUMP: patch
