@@ -25,19 +25,19 @@ jobs:
         run: npm test
       - name: Discord Webhook Notify
         uses: rjstone/discord-webhook-notify@v1.0.4
-        env:
+        with:
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
       - name: The job has succeeded
         if: ${{ success() }}
-        run: echo Success!
+        run: echo "Success!"
     
     
   tag_release:
     needs: [simple_deployment_pipeline]
+    if: ${{ github.event_name == 'push' }}
     runs-on: ubuntu-20.04
     steps:
       - name: Bump version and push tag
-        if: ${{ github.event_name == 'push' }}
         uses: anothrNick/github-tag-action@777684df761b882a3f4f70db16ac70d8cc78d0ea
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
